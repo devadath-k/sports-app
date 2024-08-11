@@ -18,7 +18,6 @@ const userProfileSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please add your year of study']
     },
-
 })
 
 module.exports = mongoose.model('UserProfile', userProfileSchema)
