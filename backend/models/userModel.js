@@ -13,7 +13,14 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Please add a password']
-    }
+    },
+    pushSubscription: {
+        endpoint: String,
+        keys: {
+          p256dh: String,
+          auth: String,
+        },
+    },
 }, {
     timestamps: true
 })

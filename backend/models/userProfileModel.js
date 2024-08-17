@@ -6,6 +6,10 @@ const userProfileSchema = mongoose.Schema({
         required: true,
         ref: 'User'
     },
+    name: {
+        type: String,
+        required: [true, 'Please add a name']
+    },
     phone: {
         type: String,
         required: [true, 'Please add a phone number']
@@ -18,6 +22,8 @@ const userProfileSchema = mongoose.Schema({
         type: String,
         required: [true, 'Please add your year of study']
     },
+},{
+    timestamps: true
 })
 
 module.exports = mongoose.model('UserProfile', userProfileSchema)

@@ -44,6 +44,7 @@ const createUserProfile = asyncHandler(async (req, res) => {
 
     const userProfile = await UserProfile.create({
         user: req.user,
+        name: req.user.name,
         phone, hall, yearOfStudy
     })
 

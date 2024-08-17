@@ -1,15 +1,39 @@
 import { Button, TextField, Typography } from "@mui/material"
-import { useState } from "react"
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react"
+import { Link , useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {toast} from "react-toastify"
+import {login, reset} from '../features/auth/authSlice'
+import { RootState } from "../app/store";
+import { useAppDispatch } from "../types";
 
 
 function Login() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   })
 
   const {email, password} = formData;
+
+  const {user, isLoading, isError, isSuccess, message} = useSelector(
+    (state: RootState)=> state.auth 
+  )
+
+  useEffect(()=>{
+    if(isError){
+        toast.error(message as string)
+    }
+
+    if(isSuccess || user){
+        navigate('/createProfile')
+    }
+
+    dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -20,6 +44,13 @@ function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
+    const userData = {
+      email,
+      password
+    }
+
+    dispatch(login(userData))
   }
 
   return (
@@ -57,7 +88,7 @@ function Login() {
                 </div>
               </div>
               <div className="pt-4 w-full flex justify-center">
-                <Button type="submit" variant="contained" className="w-[200px]">
+                <Button type="submit" variant="contained" className="w-[200px]" disabled={isLoading}>
                   Sign In
                 </Button>
               </div>

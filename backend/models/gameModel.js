@@ -6,6 +6,10 @@ const gameSchema = mongoose.Schema({
         required: true,
         ref: 'User'
     },
+    hostName: {
+        type: String,
+        required: [true, 'Please add a name']
+    },
     gameType: {
         type: String,
         required: [true, 'Please add a game type']

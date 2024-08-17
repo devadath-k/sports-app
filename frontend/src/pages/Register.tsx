@@ -1,9 +1,17 @@
 import { Button, TextField, Typography } from "@mui/material"
-import { useState } from "react"
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {toast} from "react-toastify"
+import {register, reset} from '../features/auth/authSlice'
+import { RootState } from "../app/store";
+import { useAppDispatch } from "../types";
 
 
 function Register() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -12,6 +20,22 @@ function Register() {
   })
 
   const {email, name, password, password2} = formData;
+
+  const {user, isLoading, isError, isSuccess, message} = useSelector(
+      (state: RootState)=> state.auth 
+  )
+
+  useEffect(()=>{
+      if(isError){
+          toast.error(message as string)
+      }
+
+      if(isSuccess || user){
+          navigate('/createProfile')
+      }
+
+      dispatch(reset())
+  }, [user, isError, isSuccess, message, navigate, dispatch])
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -22,6 +46,19 @@ function Register() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
+    if(password !== password2){
+      toast.error('passwords do not match')
+    }
+    else{
+        const userData = {
+            name,
+            email,
+            password
+        }
+
+        dispatch(register(userData))
+    }
   }
 
   return (
@@ -82,7 +119,7 @@ function Register() {
                 </div>
               </div>
               <div className="pt-4 w-full flex justify-center">
-                <Button type="submit" variant="contained" className="w-[200px]">
+                <Button type="submit" variant="contained" className="w-[200px]" disabled={isLoading}>
                   Sign Up
                 </Button>
               </div>

@@ -1,7 +1,14 @@
 const asyncHandler = require('express-async-handler')
-
+const webPush = require('web-push');
 const Game = require('../models/gameModel')
 const User = require('../models/userModel')
+const Subscription = require('../models/subscriptionModel')
+
+webPush.setVapidDetails(
+    'mailto:devadath.k001@gmail.com',
+    process.env.PUBLIC_KEY,
+    process.env.PRIVATE_KEY,
+);
 
 //@desc Get games
 //@route GET /api/games
@@ -16,11 +23,47 @@ const getGames = asyncHandler(async (req, res) => {
 //@access Private
 const createGame = asyncHandler(async (req, res) => {
     const { gameType, location, date, startTime, maxPlayers } = req.body
+
+    if(!gameType || !location || !date || !startTime || !maxPlayers){
+        res.status(400)
+        throw new Error('Please add all fields')
+    }
     const game = await Game.create({
         user: req.user,
+        hostName: req.user.name,
         gameType, location, date, startTime, maxPlayers,
         participants: [req.user]
     })
+
+    const subscriptions = await Subscription.find({})
+    console.log(`Found ${subscriptions.length} subscriptions`);
+
+    try {
+        const notifications = subscriptions.map(subscription => {
+            const payload = JSON.stringify({
+                title: `${game.gameType} match hosted`,
+                body:   `Join now! at ${game.location}`,
+            });
+
+            const subs = {
+                endpoint: subscription.endpoint,
+                keys: {
+                    p256dh: subscription.keys.p256dh,
+                    auth: subscription.keys.auth
+                }
+            }
+
+            console.log('Sending notification to:', subs.endpoint);
+            return webPush.sendNotification(subs, payload)
+        });
+
+        await Promise.all(notifications);
+        console.log('Notifications sent successfully');
+    } catch (error) {
+        console.error('Error sending notifications:', error);
+    }
+
+
     res.status(200).json(game)
 })
 

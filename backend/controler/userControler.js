@@ -45,7 +45,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error('Invalid user data')
     }
 
-    res.json({message: "register user"})
+    // res.json({message: "register user"})
 })
 
 //@desc Login user
@@ -69,7 +69,7 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new Error('Invalid credentials')
      }
 
-    res.json({message: "login user"})
+    // res.json({message: "login user"})
 })
 
 //@desc Get User data
@@ -89,5 +89,5 @@ const generateToken = (id) => {
 module.exports = {
     registerUser,
     loginUser,
-    getMe
+    getMe, 
 }
