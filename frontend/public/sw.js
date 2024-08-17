@@ -12,11 +12,11 @@ self.addEventListener('push', function(event) {
     );
   });
   
-  self.addEventListener('notificationclick', function(event) {
-    event.notification.close();
-  
-    event.waitUntil(
-      clients.openWindow('/Dashboard') // Open your app or a specific URL
-    );
-  });
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+
+  event.waitUntil(
+    clients.openWindow('/Dashboard') // Open your app or a specific URL
+  );
+});
   

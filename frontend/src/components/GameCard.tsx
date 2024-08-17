@@ -18,7 +18,7 @@ export default function GameCard({game, joined}: {game: gameType, joined: boolea
   }
 
   return (
-    <Card sx={{ minWidth: 275 , maxWidth: 400}}>
+    <Card sx={{ minWidth: 275 , maxWidth: 400}} className='h-[220px] min-h-[220px] sm:h-[200px] sm:min-h-[200px]'>
       <CardContent >
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom className = "capitalize">
           Hosted By: {game.hostName}
