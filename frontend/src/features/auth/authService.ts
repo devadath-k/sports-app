@@ -91,7 +91,7 @@ function urlBase64ToUint8Array(base64String: string) {
   
   
   // Save the subscription to your server
-  async function saveSubscriptionToServer(subscription) {
+  async function saveSubscriptionToServer(subscription: any) {
     try {
         const user = localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user')!) : null;
         if(!user) {
