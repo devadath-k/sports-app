@@ -96,7 +96,7 @@ const HostForm: FC = () => {
                     onChange={onChange} 
                     variant="standard" 
                     className="w-full" 
-                    sx={{ input: { color: 'white' }, label: { color: 'white' } }} />
+                    sx={{ input: { color: 'white' } }} />
                 </div>
                 <div className="w-full">
                   <TextField 

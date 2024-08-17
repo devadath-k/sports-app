@@ -28,7 +28,7 @@ export const checkForProfile = createAsyncThunk<
         const token = thunkAPI.getState().auth.user?.token
         if (!token) throw new Error('No token available');
         const profile = await getMyProfile(token);
-        console.log(profile)
+        // console.log(profile)
         return profile; 
     }
     catch(error:any){

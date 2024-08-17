@@ -38,6 +38,12 @@ export type gameDataType = {
     maxPlayers: number,
 }
 
+export type participantType = {
+    userId: string,
+    name: string,
+    phone: string
+}
+
 export type gameType = {
     _id: string,
     user: string,
@@ -47,7 +53,7 @@ export type gameType = {
     date: Date,
     startTime: string,
     maxPlayers: number,
-    participants: string[]
+    participants: participantType[]
 }
 
 export type gameSliceType = {

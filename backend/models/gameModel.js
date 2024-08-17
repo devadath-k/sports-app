@@ -32,8 +32,16 @@ const gameSchema = mongoose.Schema({
     },
     participants: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            name: {
+                type: String
+            },
+            phone: {
+                type: String
+            },
         }
     ]
 }, {

@@ -46,7 +46,7 @@ export default function GamesList() {
     return gameDate >= today; // Compare the game's date with today's date
   });
 
-  const availableGames = upcomingGames.filter((game) => ((game.participants.length < game.maxPlayers) && !game.participants.includes(user?._id as string)))
+  const availableGames = upcomingGames.filter((game) => ((game.participants.length < game.maxPlayers) && !game.participants.some(participant => participant.userId === (user ? user._id : ''))))
 
   const myGames = games.filter((game) => game.hostName === user?.name)
 
@@ -105,8 +105,8 @@ export default function GamesList() {
         <div className="flex flex-col gap-3 h-[70vh] overflow-y-auto scrollbar-thin">
           {
             upcomingGames.length!==0 && 
-            [...upcomingGames].filter((game)=>Array.isArray(game.participants) && game.participants.length!==0 && game.participants.includes(user ? user._id : '')).length !== 0 ? 
-            [...upcomingGames].filter((game)=>Array.isArray(game.participants) && game.participants.length!==0 && game.participants.includes(user ? user._id : ''))
+            [...upcomingGames].filter((game)=>Array.isArray(game.participants) && game.participants.length!==0 && game.participants.some(participant => participant.userId === (user ? user._id : ''))).length !== 0 ? 
+            [...upcomingGames].filter((game)=>Array.isArray(game.participants) && game.participants.length!==0 && game.participants.some(participant => participant.userId === (user ? user._id : '')))
             .sort((a, b) => (new Date(a.date).getTime() - new Date(b.date).getTime()))
             .map((game)=>(
               <GameCard game = {game} joined = {true} key={game._id}/>

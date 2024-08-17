@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler')
 const webPush = require('web-push');
 const Game = require('../models/gameModel')
 const User = require('../models/userModel')
+const UserProfile = require('../models/userProfileModel')
 const Subscription = require('../models/subscriptionModel')
 
 webPush.setVapidDetails(
@@ -28,11 +29,17 @@ const createGame = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Please add all fields')
     }
+
+    const userProfile = await UserProfile.findOne({user: req.user.id})
     const game = await Game.create({
         user: req.user,
         hostName: req.user.name,
         gameType, location, date, startTime, maxPlayers,
-        participants: [req.user]
+        participants: [{
+            userId: req.user.id,
+            name: userProfile.name,
+            phone: userProfile.phone
+        }]
     })
 
     const subscriptions = await Subscription.find({})
@@ -100,7 +107,14 @@ const joinGame = asyncHandler(async (req, res) => {
         throw new Error('Game is full')
     }
 
-    game.participants.push(req.user)
+    const userProfile = await UserProfile.findOne({user: req.user.id})
+
+    game.participants.push({
+        userId: req.user.id,
+        name: userProfile.name,
+        phone: userProfile.phone
+    })
+    
     await game.save()
     res.status(200).json(game)
 })
